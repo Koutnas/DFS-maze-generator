@@ -15,7 +15,7 @@ struct node{
     bool left = true;
 };
 
-void get_chart(node chart[][5],int x,int y){
+void get_chart(std::vector<node> chart,int x,int y){
     int chart_i = 0;
     for(int a = 0; a < x; a++){std::cout<<"+---";}std::cout<<"+"; //tiskne prvni radek
 
@@ -26,7 +26,7 @@ void get_chart(node chart[][5],int x,int y){
             case 1:
                 if((i != (2*y)-1)){
                     for(int j = 0; j < x; j++){
-                        if(!chart[chart_i][j].down && !chart[chart_i+1][j].up){std::cout<<"+   ";}
+                        if(!chart[j + x*chart_i].down && !chart[j + x*(chart_i+1)].up){std::cout<<"+   ";}
                         else{std::cout<<"+---";}
                     }
                     std::cout<<"+";
@@ -35,7 +35,7 @@ void get_chart(node chart[][5],int x,int y){
             case 0:
                 std::cout<<"|   ";
                 for(int j = 0; j < x-1; j++){
-                    if(!chart[chart_i][j].right && !chart[chart_i][j+1].left){std::cout<<"    ";}
+                    if(!chart[j + x*chart_i].right && !chart[j+1 + x*chart_i].left){std::cout<<"    ";}
                     else{std::cout<<"|   ";}
                 }
                 std::cout<<"|";
@@ -50,18 +50,27 @@ void get_chart(node chart[][5],int x,int y){
 
 class DFSWorm{
 public:
-    node maze[5][5];
-    int x_l = 5;
-    int y_l = 5;
+    std::vector<node> maze;
+    int x_l;
+    int y_l;
     int x;
     int y;
+
+    DFSWorm(int x_l, int y_l){
+        this->x_l = x_l;
+        this->y_l = y_l;
+        for(int i = 0; i < x_l*y_l; i++){
+            node tmp;
+            maze.push_back(tmp);
+        }
+    }
 
 
     bool avalible(int xl, int yl){
         if(xl < 0 || xl >= x_l || yl < 0 || yl >= y_l){
             return false;
         }
-        if(maze[yl][xl].visited){
+        if(maze[xl + x_l*yl].visited){
             return false;
         }
         return true;
@@ -84,61 +93,39 @@ public:
     void move(int moveint){
         switch(moveint){
             case 1:
-                maze[y][x].up = false;
-                maze[y-1][x].down = false;
-                maze[y-1][x].visited = true;
+                maze[x + x_l*y].up = false;
+                maze[x + x_l*(y-1)].down = false;
+                maze[x + x_l*(y-1)].visited = true;
                 y -= 1;
                 break;
             case 2:
-                maze[y][x].right = false;
-                maze[y][x+1].left = false;
-                maze[y][x+1].visited = true;
+                maze[x + x_l*y].right = false;
+                maze[x+1 + x_l*y].left = false;
+                maze[x+1 + x_l*y].visited = true;
                 x += 1;
                 break;
             case 3:
-                maze[y][x].down = false;
-                maze[y+1][x].up = false;
-                maze[y+1][x].visited = true;
+                maze[x + x_l*y].down = false;
+                maze[x + x_l*(y+1)].up = false;
+                maze[x + x_l*(y+1)].visited = true;
                 y += 1;
                 break;
             case 4:
-                maze[y][x].left = false;
-                maze[y][x-1].right = false;
-                maze[y][x-1].visited = true;
+                maze[x + x_l*y].left = false;
+                maze[x-1 + x_l*y].right = false;
+                maze[x-1 + x_l*y].visited = true;
                 x -= 1;
                 break;
         }
     }
 
-    void recursive_movement(){
-        std::vector<coords> stack;
-        coords now;
-        now.x = x;
-        now.y = y;
-        stack.push_back(now);
-        std::vector<int> moves = validate_moves();
-
-        if(moves.size() == 0){
-            stack.pop_back();
-            x = stack.back().x;
-            y = stack.back().y;
-            stack.pop_back();
-            }
-        int moveint = pick_move(moves);
-        move(moveint);
-        std::cout<<"\n";
-        get_chart(maze,5,5);
-        std::cout<<"stepped to: "<<x<<","<<y<<std::endl;
-    }
-
-
     void start_crawl(){
-        std::srand(23);
+        std::srand(time(NULL));
         int moveint;
         std::vector<coords> stack;
         this->x = std::rand()%x_l;
         this->y = std::rand()%y_l; //start at random position
-        maze[y][x].visited = true;
+        maze[x + x_l*y].visited = true;
         //std::cout<<"Starteted at: "<<x<<","<<y<<std::endl;
 
         while (true)
@@ -160,28 +147,43 @@ public:
             moveint = pick_move(moves);
             move(moveint);
             //std::cout<<"\n";
-            //get_chart(maze,5,5);
+            //get_chart(maze,x_l,y_l);
             //std::cout<<"stepped to: "<<x<<","<<y<<std::endl;
         }
         
-        get_chart(maze,5,5);
+        get_chart(maze,x_l,y_l);
         std::cout<<"\n";
     }
 
 };
 
 int main(){
+    /*
     DFSWorm worm = DFSWorm();
     worm.start_crawl();
     return 0;
-    //
-    //node maze[5][5];
-    //maze[1][3].right = false;
-    //maze[1][4].left = false;
-    //maze[1][4].visited = true;
-    //maze[3][3].left = false;
-    //maze[3][2].right = false;
-    //get_chart(maze,5,5);
     
+    std::vector<node> maze;
+    int y_l = 5;
+    int x_l = 5;
+    for(int i = 0; i < x_l*y_l; i++){
+        node tmp;
+        maze.push_back(tmp);
+    }
+    maze[16].down = false;
+    maze[21].up = false;
+    get_chart(maze,x_l,y_l);
+    */
+
+    
+    int x;
+    int y;
+    std::vector<node> maze;
+    std::cin>>x;
+    std::cout<<std::endl;
+    std::cin>>y;
+    DFSWorm worm = DFSWorm(x,y);
+    worm.start_crawl();
+
 
 }
