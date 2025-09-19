@@ -1,19 +1,8 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include "struct.h"
 
-struct coords{
-    int x;
-    int y;
-};
-
-struct node{
-    bool visited = false;
-    bool up = true;
-    bool down = true;
-    bool right = true;
-    bool left = true;
-};
 
 class DFSWorm{
 private:

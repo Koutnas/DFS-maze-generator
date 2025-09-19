@@ -1,5 +1,6 @@
 #include "DFSWorm.h"
 
+
 DFSWorm::DFSWorm(int x_l,int y_l){
     this->x_l = x_l;
     this->y_l = y_l;
@@ -7,6 +8,11 @@ DFSWorm::DFSWorm(int x_l,int y_l){
         node tmp;
         maze.push_back(tmp);
     }
+    std::srand(time(NULL));
+    int r1 = rand()%(x_l*y_l);
+    int r2 = rand()%(x_l*y_l);
+    maze[r1].modifier = POINT;
+    maze[r2].modifier = POINT; //setting start and end for a maze
 }
 
 bool DFSWorm::avalible(int xl,int yl){
@@ -63,7 +69,6 @@ void DFSWorm::move(int moveint){
 }
 
 std::vector<node> DFSWorm::start_crawl(){
-    std::srand(time(NULL));
         int moveint;
         std::vector<coords> stack;
         this->x = std::rand()%x_l;
@@ -93,5 +98,6 @@ std::vector<node> DFSWorm::start_crawl(){
             //get_chart(maze,x_l,y_l);
             //std::cout<<"stepped to: "<<x<<","<<y<<std::endl; //For debugging
         }
+        for(int i = 0; i < x_l*y_l; i++){maze[i].visited = false;} // Useless change but helps with readability if maze is processed further
         return maze;
 }
