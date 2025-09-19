@@ -1,7 +1,4 @@
-#include <vector>
-#include <cstdlib>
-#include <iostream>
-#include "struct.h"
+#include "helper.h"
 
 
 class DFSWorm{

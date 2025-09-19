@@ -9,6 +9,8 @@
                 "-g",
                 "${file}",
                 "DFSWorm.cpp",
+                "helper.cpp",
+                "BFSolver.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],
