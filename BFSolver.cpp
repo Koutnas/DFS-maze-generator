@@ -6,27 +6,6 @@ BFSolver::BFSolver(std::vector<node> maze, int x_l ,int y_l){
         this->y_l = y_l;
     }
 
-coords BFSolver::find_start(){
-    coords start;
-    start.x = 0; start.y = 0;
-    for(int i = 0;i<x_l*y_l;i++){
-        if(maze[i].modifier == POINT){
-            start.x = i%x_l;
-            start.y = (i-start.x)/x_l;
-            return start;
-        }
-    }
-    return start;
-}
-
-bool BFSolver::compare_coords(coords c1, coords c2){
-    if (c1.x == c2.x && c1.y == c2.y){
-        return true;
-    }
-    else{
-        return false;
-    }
-}
 
 void BFSolver::add_neighbours(coords node_c,std::queue<coords>& q, std::vector<family>& registry){ //passing by address - thus directly modifying original vector and q
     coords tmpc;
@@ -86,7 +65,7 @@ void BFSolver::markdown_solution(std::vector<family> &registry,coords start,coor
 
 void BFSolver::solve(){
     coords end;
-    coords start = find_start();
+    coords start = find_start(maze,x_l,y_l);
     std::queue<coords> q;
     std::vector<family> registry;
     maze[start.x + x_l*start.y].visited = true;

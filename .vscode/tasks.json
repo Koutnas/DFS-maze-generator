@@ -11,6 +11,7 @@
                 "DFSWorm.cpp",
                 "helper.cpp",
                 "BFSolver.cpp",
+                "DFSolver.cpp",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}"
             ],

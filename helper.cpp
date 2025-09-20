@@ -48,3 +48,25 @@ void get_chart(std::vector<node> chart,int x, int y){
 
     for(int a = 0; a < x; a++){std::cout<<"+---";}std::cout<<"+";
 }
+
+bool compare_coords(coords c1, coords c2){
+    if (c1.x == c2.x && c1.y == c2.y){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+coords find_start(std::vector<node> maze,int x_l, int y_l){
+    coords start;
+    start.x = 0; start.y = 0;
+    for(int i = 0;i<x_l*y_l;i++){
+        if(maze[i].modifier == POINT){
+            start.x = i%x_l;
+            start.y = (i-start.x)/x_l;
+            return start;
+        }
+    }
+    return start;
+}

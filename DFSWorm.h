@@ -23,4 +23,6 @@ public:
 
     std::vector<node> start_crawl();
 
+    void render_crawl();
+
 };

@@ -2,6 +2,9 @@
 #include <vector>
 #include <cstdlib>
 #include <iostream>
+#include <chrono>
+#include <thread>
+
 
 #define NORMAL 0
 #define POINT 1
@@ -27,3 +30,7 @@ struct family{
 };
 
 void get_chart(std::vector<node> maze, int x, int y);
+
+bool compare_coords(coords c1, coords c2);
+
+coords find_start(std::vector<node> maze,int x_l, int y_l);

@@ -101,3 +101,36 @@ std::vector<node> DFSWorm::start_crawl(){
         for(int i = 0; i < x_l*y_l; i++){maze[i].visited = false;} // Useless change but helps with readability if maze is processed further
         return maze;
 }
+
+void DFSWorm::render_crawl(){
+        //std::cout << "\033[2J\033[1;1H";
+        int moveint;
+        std::vector<coords> stack;
+        this->x = std::rand()%x_l;
+        this->y = std::rand()%y_l; //start at random position
+        maze[x + x_l*y].visited = true;
+        //std::cout<<"Starteted at: "<<x<<","<<y<<std::endl;
+
+        while (true)
+        {   
+            std::vector<int> moves = validate_moves();
+            if(moves.size() == 0 && stack.size() == 0){break;}
+            coords now;
+            now.x = x;
+            now.y = y;
+            stack.push_back(now);
+
+            if(moves.size() == 0){
+                stack.pop_back();
+                x = stack.back().x;
+                y = stack.back().y;
+                stack.pop_back();
+                continue;
+                }
+            moveint = pick_move(moves);
+            move(moveint);
+            get_chart(maze,x_l,y_l);
+            std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(75));
+        }
+}

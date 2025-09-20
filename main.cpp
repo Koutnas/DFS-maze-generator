@@ -1,6 +1,6 @@
 #include "DFSWorm.h"
 #include "BFSolver.h"
-#include <queue>
+#include "DFSolver.h"
 
 
 int main(){
@@ -14,9 +14,10 @@ int main(){
     std::cout<<"y:";
     std::cin>>y;
     DFSWorm worm = DFSWorm(x,y);
+    //worm.render_crawl();
     maze = worm.start_crawl();
-    //get_chart(maze,x,y);
-    BFSolver solver = BFSolver(maze,x,y);
+    get_chart(maze,x,y);
+    DFSolver solver = DFSolver(maze,x,y);
     solver.solve();
     return 0;
 }
