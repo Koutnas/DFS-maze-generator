@@ -14,12 +14,14 @@ int main(){
     std::cout<<"y:";
     std::cin>>y;
     DFSWorm worm = DFSWorm(x,y);
-    worm.set_purity(0);
+    worm.set_purity(50);
     maze = worm.start_crawl();
     get_chart(maze,x,y);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     DFSolver dsolver = DFSolver(maze,x,y);
-    dsolver.solve();
+    dsolver.r_solve(75);
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     BFSolver bsolver = BFSolver(maze,x,y);
-    bsolver.solve();
+    bsolver.r_solve();
     return 0;
 }

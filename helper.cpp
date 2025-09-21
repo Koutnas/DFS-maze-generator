@@ -22,6 +22,8 @@ void get_chart(std::vector<node> chart,int x, int y){
                     std::cout<<"| ⚑ ";
                 }else if(chart[chart_i*x].modifier == PATH){
                     std::cout<<"|\033[32m • \033[0m";
+                }else if(chart[chart_i*x].modifier == ACCESSED){
+                    std::cout<<"|\033[31m • \033[0m";
                 }else{
                     std::cout<<"|   ";}
                 for(int j = 0; j < x-1; j++){
@@ -33,6 +35,10 @@ void get_chart(std::vector<node> chart,int x, int y){
                         case POINT:
                             if(!chart[j + x*chart_i].right && !chart[j+1 + x*chart_i].left){std::cout<<" ⚑  ";}
                             else{std::cout<<"| ⚑ ";}
+                            break;
+                        case ACCESSED:
+                            if(!chart[j + x*chart_i].right && !chart[j+1 + x*chart_i].left){std::cout<<"\033[31m  • \033[0m";}
+                            else{std::cout<<"|\033[31m • \033[0m";}
                             break;
                         case PATH:
                             if(!chart[j + x*chart_i].right && !chart[j+1 + x*chart_i].left){std::cout<<"\033[32m  • \033[0m";}
@@ -47,6 +53,7 @@ void get_chart(std::vector<node> chart,int x, int y){
     }
 
     for(int a = 0; a < x; a++){std::cout<<"+---";}std::cout<<"+";
+    std::cout<<"\n";
 }
 
 bool compare_coords(coords c1, coords c2){

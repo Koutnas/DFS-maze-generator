@@ -10,10 +10,12 @@ private:
     
     void add_neighbours(coords node_c, std::queue<coords> &q, std::vector<family> &registry);
 
-    void markdown_solution(std::vector<family> &registry, coords start, coords end);
+    void markdown_solution(std::vector<family> &registry, coords start, coords end, bool render);
 
 public:
     BFSolver(std::vector<node> maze, int x_l, int y_l);
 
     void solve();
+
+    void r_solve();
 };

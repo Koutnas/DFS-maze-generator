@@ -46,7 +46,7 @@ void BFSolver::add_neighbours(coords node_c,std::queue<coords>& q, std::vector<f
     }
 }
 
-void BFSolver::markdown_solution(std::vector<family> &registry,coords start,coords end){
+void BFSolver::markdown_solution(std::vector<family> &registry,coords start,coords end,bool render){
     coords current = end;
     while(!compare_coords(current,start)){
         
@@ -55,6 +55,12 @@ void BFSolver::markdown_solution(std::vector<family> &registry,coords start,coor
                 current = registry[i].parent;
                 if(maze[current.x + x_l*current.y].modifier != POINT){
                     maze[current.x + x_l*current.y].modifier = PATH;
+                }
+                if(render){
+                    std::cout << "\033[2J\033[1;1H";
+                    get_chart(maze,x_l,y_l);
+                    std::cout<<"\n";
+                    std::this_thread::sleep_for(std::chrono::milliseconds(75));
                 }
             }
         }
@@ -78,5 +84,30 @@ void BFSolver::solve(){
     /*for(int i = 0; i < registry.size(); i++){
         std::cout<<"\n parent: "<<registry[i].parent.x<<","<<registry[i].parent.y<<"\tchild: "<<registry[i].child.x<<","<<registry[i].child.y<<std::endl;
     }*/
-    markdown_solution(registry,start,end);
+    markdown_solution(registry,start,end,false);
+}
+void BFSolver::r_solve(){
+    coords end;
+    coords start = find_start(maze,x_l,y_l);
+    std::queue<coords> q;
+    std::vector<family> registry;
+    maze[start.x + x_l*start.y].visited = true;
+    q.push(start);
+    while(compare_coords(q.front(),start) || maze[q.front().x + x_l*q.front().y].modifier != POINT && !q.empty()){
+        add_neighbours(q.front(),q,registry);
+        coords tmp = q.front();
+        if (maze[tmp.x + x_l*tmp.y].modifier != POINT){
+            (maze[tmp.x + x_l*tmp.y].modifier = ACCESSED);
+        };
+        std::cout << "\033[2J\033[1;1H";
+        get_chart(maze,x_l,y_l);
+        std::cout<<"\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(75));
+        q.pop();
+    }
+    end = q.front();
+    /*for(int i = 0; i < registry.size(); i++){
+        std::cout<<"\n parent: "<<registry[i].parent.x<<","<<registry[i].parent.y<<"\tchild: "<<registry[i].child.x<<","<<registry[i].child.y<<std::endl;
+    }*/
+    markdown_solution(registry,start,end,true);
 }

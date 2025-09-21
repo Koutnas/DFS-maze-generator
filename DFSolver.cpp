@@ -57,3 +57,38 @@ void DFSolver::solve(){
     get_chart(maze,x_l,y_l);
 
 }
+
+void DFSolver::r_solve(int render_speed){
+    coords end;
+    coords start = find_start(maze,x_l,y_l);
+    maze[start.x + start.y*x_l].visited = true;
+    std::vector<coords> current_path;
+    current_path.push_back(start);
+    while(compare_coords(start,current_path.back()) || maze[current_path.back().x + current_path.back().y*x_l].modifier != POINT) {
+        move(current_path.back(),current_path);
+        coords tmp = current_path.back();
+        if (maze[tmp.x + x_l*tmp.y].modifier != POINT){
+            (maze[tmp.x + x_l*tmp.y].modifier = ACCESSED);
+        };
+        std::cout << "\033[2J\033[1;1H";
+        get_chart(maze,x_l,y_l);
+        std::this_thread::sleep_for(std::chrono::milliseconds(render_speed));
+
+    }
+    /*
+    for(int i = 0; i < current_path.size(); i++){
+        std::cout<<"\n step: "<<current_path[i].x<<","<<current_path[i].y;
+    }
+    */
+    for(int i = 0; i < current_path.size(); i++){
+        if(maze[current_path[i].x + x_l*current_path[i].y].modifier != POINT){
+            maze[current_path[i].x + x_l*current_path[i].y].modifier = PATH;
+        }
+        std::cout << "\033[2J\033[1;1H";
+        get_chart(maze,x_l,y_l);
+        std::this_thread::sleep_for(std::chrono::milliseconds(render_speed));
+    }
+    std::cout<<"\n";
+    get_chart(maze,x_l,y_l);
+
+}

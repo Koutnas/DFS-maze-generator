@@ -13,4 +13,6 @@ public:
     DFSolver(std::vector<node> maze, int x_l, int y_l);
 
     void solve();
+
+    void r_solve(int render_speed);
 };

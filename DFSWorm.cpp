@@ -168,7 +168,7 @@ std::vector<node> DFSWorm::start_crawl(){
 }
 
 void DFSWorm::render_crawl(){
-        //std::cout << "\033[2J\033[1;1H";
+        std::cout << "\033[2J\033[1;1H";
         int moveint;
         std::vector<coords> stack;
         this->x = std::rand()%x_l;
@@ -195,7 +195,6 @@ void DFSWorm::render_crawl(){
             moveint = pick_move(moves);
             move(moveint);
             get_chart(maze,x_l,y_l);
-            std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(75));
         }
 }

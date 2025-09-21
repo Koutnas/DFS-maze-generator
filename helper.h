@@ -9,6 +9,7 @@
 #define NORMAL 0
 #define POINT 1
 #define PATH 3
+#define ACCESSED 2
 
 struct coords{
     int x;
