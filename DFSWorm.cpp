@@ -67,6 +67,70 @@ void DFSWorm::move(int moveint){
                 break;
         }
 }
+void DFSWorm::delete_wall(std::vector<int> &walls,int rx, int ry){
+    std::vector<int> lotto;
+    node curr = maze[rx + x_l*ry];
+    if(rx == 0){
+        walls[3] = 0;
+    }
+    else if(rx == x_l -1){
+        walls[1] = 0;
+    }
+
+    if(ry == 0){
+        walls[0] = 0;
+    }
+    else if(ry == y_l-1){
+        walls[2] = 0; 
+    }
+
+    if(!curr.up){walls[0] = 0;}
+    if(!curr.right){walls[1] = 0;}
+    if(!curr.down){walls[2] = 0;}
+    if(!curr.left){walls[3] = 0;}
+
+    for(int i = 0; i < 4;i++){
+        if(walls[i] > 0){
+            lotto.push_back(walls[i]);
+        }
+    }
+    if(lotto.empty()){return;}
+
+    switch(lotto[rand()%lotto.size()]){
+        case 1:
+            maze[rx + x_l*ry].up = false;
+            maze[rx + x_l*(ry-1)].down = false;
+            break;
+        case 2:
+            maze[rx + x_l*ry].right = false;
+            maze[rx+1 + x_l*ry].left = false;
+            break;
+        case 3:
+            maze[rx + x_l*ry].down = false;
+            maze[rx + x_l*(ry+1)].up = false;
+            break;
+        case 4:
+            maze[rx + x_l*ry].left = false;
+            maze[rx-1 + x_l*ry].right = false;
+            break;
+    }
+}
+
+void DFSWorm::taint_maze(){
+    if(purity == 100){return;}
+    
+
+    int node_count = (x_l*y_l)*((100-purity)/100.0);
+    int rx;
+    int ry;
+
+    for(int i = 0; i < node_count; i++){
+        rx = rand()%x_l;
+        ry = rand()%y_l;
+        std::vector<int> valid_walls = {1,2,3,4};
+        delete_wall(valid_walls,rx,ry);
+    }
+}
 
 std::vector<node> DFSWorm::start_crawl(){
         int moveint;
@@ -99,6 +163,7 @@ std::vector<node> DFSWorm::start_crawl(){
             //std::cout<<"stepped to: "<<x<<","<<y<<std::endl; //For debugging
         }
         for(int i = 0; i < x_l*y_l; i++){maze[i].visited = false;} // Useless change but helps with readability if maze is processed further
+        taint_maze();
         return maze;
 }
 
@@ -133,4 +198,10 @@ void DFSWorm::render_crawl(){
             std::cout<<"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
             std::this_thread::sleep_for(std::chrono::milliseconds(75));
         }
+}
+
+void DFSWorm::set_purity(int purity){
+    if(purity>=0 && purity<=100){
+        this->purity = purity;
+    }
 }

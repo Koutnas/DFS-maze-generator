@@ -14,10 +14,12 @@ int main(){
     std::cout<<"y:";
     std::cin>>y;
     DFSWorm worm = DFSWorm(x,y);
-    //worm.render_crawl();
+    worm.set_purity(0);
     maze = worm.start_crawl();
     get_chart(maze,x,y);
-    DFSolver solver = DFSolver(maze,x,y);
-    solver.solve();
+    DFSolver dsolver = DFSolver(maze,x,y);
+    dsolver.solve();
+    BFSolver bsolver = BFSolver(maze,x,y);
+    bsolver.solve();
     return 0;
 }
